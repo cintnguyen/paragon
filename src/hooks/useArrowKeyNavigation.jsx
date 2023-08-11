@@ -16,8 +16,9 @@ function handleArrowKey({ event, currentIndex, availableElements }) {
 
   // Move the focus up or down. Wrap around ends of list.
   let nextElement;
-
-  if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+  console.log("EVENT KEY:", event.key)
+  
+  if (event.key === 'ArrowDown' || event.key === 'ArrowRight'|| event.key === 'Tab') {
     nextElement = availableElements[(currentIndex + 1) % availableElements.length];
   }
   if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
@@ -50,6 +51,7 @@ function handleEvents({
 
   const { key } = event;
 
+  // if (!['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'Enter', 'Home', 'End', 'Tab'].includes(key) // this makes the tab key 
   if (!['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'Enter', 'Home', 'End'].includes(key)
       || ignoredKeys.includes(key)) {
     return;

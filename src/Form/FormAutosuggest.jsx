@@ -31,6 +31,11 @@ function FormAutosuggest({
     selectors: arrowKeyNavigationSelector,
     ignoredKeys: ignoredArrowKeysNames,
   });
+
+  const input = parentRef.current?parentRef.current.querySelector("input"):null
+
+  console.log(input)
+
   const [isMenuClosed, setIsMenuClosed] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [state, setState] = useState({
@@ -113,7 +118,7 @@ function FormAutosuggest({
   );
 
   const handleDocumentClick = (e) => {
-    if (parentRef.current && !parentRef.current.contains(e.target) && isActive) {
+    if (isActive && parentRef.current && !parentRef.current.contains(e.target)) {
       setIsActive(false);
 
       setState(prevState => ({
@@ -127,6 +132,9 @@ function FormAutosuggest({
   };
 
   const keyDownHandler = e => {
+    console.log("TARGET:", e.target)
+    console.log("CURRENT TARGET:", e.currentTarget)
+
     if (e.key === 'Escape' && isActive) {
       e.preventDefault();
 
