@@ -33,10 +33,14 @@ function FormAutosuggest({
   });
 
   const input = parentRef.current?parentRef.current.querySelector("input"):null
+  // console.log(input)
 
-  console.log(input)
+  // const [searchStr, setSearchStr] = useState(""); //the input string
+  // console.log("searchStr", searchStr)
 
   const [isMenuClosed, setIsMenuClosed] = useState(true);
+  console.log("Is Menu Closed", isMenuClosed)
+
   const [isActive, setIsActive] = useState(false);
   const [state, setState] = useState({
     displayValue: value || '',
@@ -65,7 +69,8 @@ function FormAutosuggest({
   };
 
   function getItems(strToFind = '') {
-    let childrenOpt = React.Children.map(children, (child) => {
+    console.log("strToFind", strToFind)
+    let childrenOpt = React.Children.map(children, (child,index) => {
       // eslint-disable-next-line no-shadow
       const { children, onClick, ...rest } = child.props;
 
@@ -74,6 +79,7 @@ function FormAutosuggest({
         children,
         value: children,
         onClick: (e) => handleItemClick(e, onClick),
+        key: index,
       });
     });
 
@@ -81,19 +87,20 @@ function FormAutosuggest({
       childrenOpt = childrenOpt
         .filter((opt) => (opt.props.children.toLowerCase().includes(strToFind.toLowerCase())));
     }
-
+    console.log("ChildrenOpt", childrenOpt)
     return childrenOpt;
   }
 
   const handleExpand = (e) => {
-    setIsMenuClosed(!isMenuClosed);
 
     const newState = {
       dropDownItems: [],
     };
-
-    if (isMenuClosed) {
-      newState.dropDownItems = getItems(e.target.value);
+    
+    if (isMenuClosed) { //menu is currently closed, but going from closed to open
+      newState.dropDownItems = getItems(state.displayValue); //originally e.target.value which is nothing, target was the icon (no value)
+      //assumed you typed nothing, hence why it would repopulate with everything
+      console.log("Is Menu Closed:True", newState.dropDownItems, e.target.value)
       newState.errorMessage = '';
     }
 
@@ -101,6 +108,9 @@ function FormAutosuggest({
       ...prevState,
       ...newState,
     }));
+    console.log("Exapnd", isMenuClosed, newState)
+
+    setIsMenuClosed(!isMenuClosed);
   };
 
   const iconToggle = (
@@ -132,8 +142,9 @@ function FormAutosuggest({
   };
 
   const keyDownHandler = e => {
-    console.log("TARGET:", e.target)
-    console.log("CURRENT TARGET:", e.currentTarget)
+    // console.log("TARGET:", e.target)
+    // console.log("CURRENT TARGET:", e.currentTarget)
+    console.log("Key down handler:", e.key, state.dropDownItems)
 
     if (e.key === 'Escape' && isActive) {
       e.preventDefault();
@@ -199,7 +210,6 @@ function FormAutosuggest({
 
   const handleOnChange = (e) => {
     const findStr = e.target.value;
-
     if (onChange) { onChange(findStr); }
 
     if (findStr.length) {
@@ -222,7 +232,7 @@ function FormAutosuggest({
 
     setDisplayValue(e.target.value);
   };
-
+  console.log("Before return", state.dropDownItems)
   return (
     <div className="pgn__form-autosuggest__wrapper" ref={parentRef}>
       <FormGroup isInvalid={!!state.errorMessage}>
