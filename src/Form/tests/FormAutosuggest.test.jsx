@@ -33,6 +33,9 @@ describe('FormAutosuggest', () => {
   const onSelected = jest.fn();
   const onClick = jest.fn();
 
+  const app = document.createElement('div');
+  document.body.appendChild(app);
+
   const container = mount(
     <FormAutosuggestWrapper
       name="FormAutosuggest"
@@ -45,6 +48,7 @@ describe('FormAutosuggest', () => {
       <FormAutosuggestOption onClick={onClick}>Option 2</FormAutosuggestOption>
       <FormAutosuggestOption>Learn from more than 160 member universities</FormAutosuggestOption>
     </FormAutosuggestWrapper>,
+      { attachTo: app },
   );
 
   describe('render behavior', () => {
@@ -141,6 +145,31 @@ describe('FormAutosuggest', () => {
 
       container.find('button.pgn__form-autosuggest__icon-button').simulate('click');
       expect(container.find(dropdownContainer).find('button').length).toEqual(3);
+    });
+
+    it.only('check focus on input after esc', () => {
+      const input = container.find('input');
+
+      expect(input.matchesElement(document.activeElement)).toEqual(false);
+      input.simulate('click');
+      expect(input.at(0).html()).toEqual(document.activeElement.outerHTML);
+
+      // container.find('button.pgn__form-autosuggest__icon-button').simulate('click');
+      // console.log("DOC ACTIVE ELEMENT:", document.activeElement)
+      
+      
+      // const spy = jest.spyOn(input.current, 'focus')
+      // container.simulate('keypress', { key: 'Esc' });
+
+      
+      // console.log("DOC ACTIVE ELEMENT:", document.activeElement)
+      // expect(input.matchesElement(document.activeElement)).toBeTruthy();
+
+      // expect(input.is(':focus')).toBe(true)
+      // console.log("DOC OUTER HTML:", document.activeElement.outerHTML)
+      // expect(input.at(0).html()).toEqual(document.activeElement.outerHTML)
+    
+      // expect(spy).toHaveBeenCalled()
     });
 
     it('shows options list depends on field value', () => {
