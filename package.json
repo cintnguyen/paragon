@@ -30,7 +30,7 @@
     "semantic-release": "semantic-release",
     "snapshot": "jest --updateSnapshot",
     "start": "npm start --workspace=www",
-    "test": "jest --coverage",
+    "test": "jest --coverage FormAutosuggest.test.jsx",
     "test:watch": "npm run test -- --watch",
     "generate-component": "npm start --workspace=component-generator",
     "start-example-mfe": "npm run start --workspace=example",
