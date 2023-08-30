@@ -149,22 +149,41 @@ describe('FormAutosuggest', () => {
 
     it.only('check focus on input after esc', () => {
       // expect(input.matchesElement(document.activeElement)).toEqual(false);
-
       // expect(input.at(0).html()).toEqual(document.activeElement.outerHTML);
+      // console.log("DOC ACTIVE ELEMENT:", document.activeElement.outerHTML)
+      // const dropdownContainer = '.pgn__form-autosuggest__dropdown';
 
-
-      // console.log("DOC ACTIVE ELEMENT:", document.activeElement)
+      container.find('button.pgn__form-autosuggest__icon-button').simulate('click');
+      console.log("DOC ACTIVE ELEMENT:", document.activeElement.outerHTML)
+      container.simulate('keydown', { key: 'Escape' });
+      console.log("DOC ACTIVE ELEMENT:", document.activeElement.outerHTML)
 
       // const input = container.find('input');
+      // console.log("INPUT:", input);
+      // input.getDOMNode().focus();
+      // console.log(document.activeElement.outerHTML);
+      // // input.simulate('change', { target: { value: '1' } });
+      // container.simulate('keypress', { key: 'Tab' });
+      // container.simulate('keypress', { key: ' ' });
+      // container.simulate('keypress', { key: 'ArrowDown' });
+      // console.log(document.activeElement.outerHTML);
+
+
       // input.simulate('click');
       // container.find('input').simulate('click')
       // expect(input.is(':focus')).toBe(true)
+
+      // BRIANS SUGGESTION:
+      // let blarg = container.find('input');
+      // console.log(blarg.getDOMNode());
+      // blarg.getDOMNode().focus();
+      // blarg = container.find('input');
+      // console.log(document.activeElement.outerHTML);
 
       // setTimeout(() => {
       //   console.log("DOC ACTIVE ELEMENT:", document.activeElement)
       // }, 0);
       // console.log(input)
-
 
 
       // const spy = jest.spyOn(input.current, 'focus')
@@ -179,6 +198,7 @@ describe('FormAutosuggest', () => {
       // expect(input.at(0).html()).toEqual(document.activeElement.outerHTML)
 
       // expect(spy).toHaveBeenCalled()
+
 
     });
 
