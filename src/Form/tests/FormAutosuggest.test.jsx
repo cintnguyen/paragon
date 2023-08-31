@@ -74,10 +74,15 @@ describe('render behavior', () => {
       });
   
       it('render with loading state', () => {
-        const wrapper = mount(<FormAutosuggestWrapper isLoading />);
-  
-        expect(wrapper.exists('.pgn__form-autosuggest__dropdown-loading')).toBe(true);
-        expect(wrapper.props().isLoading).toBe(true);
+        // const wrapper = mount(<FormAutosuggestWrapper isLoading />);
+        // expect(wrapper.exists('.pgn__form-autosuggest__dropdown-loading')).toBe(true);
+        // expect(wrapper.props().isLoading).toBe(true);
+
+        // console.log((container.querySelector('.pgn__form-autosuggest__dropdown-loading')))
+
+        const { container } = render(<FormAutosuggestWrapper isLoading />);
+        expect(container.querySelector('.pgn__form-autosuggest__dropdown-loading')).toBeTruthy();
+        // expect(container.querySelector('.pgn__form-autosuggest__dropdown-loading')).toBe(true);
       });
   
   //     it('renders the auto-populated value if it exists', () => {
