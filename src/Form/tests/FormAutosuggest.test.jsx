@@ -19,7 +19,7 @@
 
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import FormAutosuggest from '../FormAutosuggest';
 import FormAutosuggestOption from '../FormAutosuggestOption';
@@ -83,12 +83,19 @@ describe('render behavior', () => {
   //       expect(wrapper.props().value).toEqual('Test Value');
   //     });
   
-  //     it('renders component with options', () => {
-  //       container.find('input').simulate('click');
-  //       const optionsList = container.find('.pgn__form-autosuggest__dropdown').find('button');
-  
-  //       expect(optionsList.length).toEqual(3);
-  //     });
+      it('renders component with options', () => {
+        // container.find('input').simulate('click');
+        // const optionsList = container.find('.pgn__form-autosuggest__dropdown').find('button');
+        // expect(optionsList.length).toEqual(3);
+
+        // const { getByTestId } = render(<FormAutosuggestWrapper />);
+        // const button = getByTestId("pgn__form-autosuggest__dropdown-box")
+        // fireEvent.click(button)
+        fireEvent.click(container.querySelector('.pgn__form-autosuggest__dropdown'));
+        const list = container.querySelectorAll('button');
+        expect(list.length).toBe(3);
+        
+      });
   
   //     it('renders with error msg', () => {
   //       container.find('input').simulate('click');
