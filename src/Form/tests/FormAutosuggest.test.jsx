@@ -8,11 +8,11 @@
       ✓ renders with error msg (8 ms) - Mena done
     controlled behavior
       ✓ selects option (8 ms) - Paired done
-      ✓ when a function is passed to onClick, it is called (6 ms) - Cindy
-      ✓ when a function is not passed to onClick, it is not called (3 ms) - Cindy
-      ✓ filters dropdown based on typed field value (2 ms) - Mena
+      ✓ calls the function passed to onClick (6 ms) - Cindy done
+      ✓ when a function is not passed to onClick, it is not called (3 ms) - Cindy done
+      ✓ filters dropdown based on typed field value (2 ms) - Cindy done
       ✓ toggles options list (3 ms) - Mena
-      ✓ filters options list based on field value (2 ms) - Cindy
+      ✓ filters options list based on field value (2 ms) - Cindy done
       ✓ closes options list on click outside (4 ms) - Mena
       ✓ check focus on input after esc - Cindy
 */
@@ -34,7 +34,7 @@ function FormAutosuggestWrapper(props) {
 
 function FormAutosuggestTestComponent(props) {
   const onSelected = props.onSelected ?? jest.fn();
-  const onClick = jest.fn();
+  const onClick = props.onClick ?? jest.fn();
   return (
     <FormAutosuggestWrapper
       name="FormAutosuggest"
@@ -136,67 +136,87 @@ describe('controlled behavior', () => {
     expect(onSelected).toHaveBeenCalledTimes(1);
   });
 
-//     it('when a function is passed to onClick, it is called', () => {
-//       container.find('input').simulate('change', { target: { value: 'Option 2' } });
-//       container.find('.pgn__form-autosuggest__dropdown').find('button')
-//         .at(0).simulate('click');
+  it('calls the function passed to onClick when an option with it is selected', () => {
+    const onClick = jest.fn();
+    const { getByText, getByTestId } = render(<FormAutosuggestTestComponent onClick={onClick} />);
+    const input = getByTestId('autosuggest_textbox_input');
 
-//       expect(onClick).toHaveBeenCalledTimes(1);
-//     });
+    fireEvent.click(input);
+    const menuItem = getByText('Option 2');
+    fireEvent.click(menuItem);
 
-//     it('when a function is not passed to onClick, it is not called', () => {
-//       container.find('input').simulate('change', { target: { value: 'Option 1' } });
-//       container.find('.pgn__form-autosuggest__dropdown').find('button')
-//         .at(0).simulate('click');
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
 
-//       expect(onClick).toHaveBeenCalledTimes(0);
-//     });
+  it('does not call onClick when an option without it is selected', () => {
+    const onClick = jest.fn();
+    const { getByText, getByTestId } = render(<FormAutosuggestTestComponent onClick={onClick} />);
+    const input = getByTestId('autosuggest_textbox_input');
 
-//     it('options list depends on empty field value', () => {
-//       container.find('input').simulate('change', { target: { value: '' } });
+    fireEvent.click(input);
+    const menuItem = getByText('Option 1');
+    fireEvent.click(menuItem);
 
-//       expect(container.find('input').instance().value).toEqual('');
-//     });
+    expect(onClick).toHaveBeenCalledTimes(0);
+  });
 
-//     it('filters dropdown based on typed field value', () => {
-//       container.find('input').simulate('change', { target: { value: 'option 1' } });
+  it('filters dropdown based on typed field value with one match', () => {
+    const { getByTestId, container } = render(<FormAutosuggestTestComponent />);
+    const input = getByTestId('autosuggest_textbox_input');
 
-//       expect(container.find('.pgn__form-autosuggest__dropdown').find('button').length).toEqual(1);
-//       expect(onSelected).toHaveBeenCalledTimes(0);
-//     });
+    fireEvent.click(input);
+    fireEvent.change(input, { target: { value: 'Option 1' } });
+    
+    const list = container.querySelectorAll('li');
+    expect(list.length).toBe(1);
+  });
 
-//     it('toggles options list', () => {
-//      this is toggling when the dropdown button is clicked
-//       const dropdownContainer = '.pgn__form-autosuggest__dropdown';
+  //     it('toggles options list', () => {
+  //      this is toggling when the dropdown button is clicked
+  //       const dropdownContainer = '.pgn__form-autosuggest__dropdown';
 
-//       expect(container.find(dropdownContainer).find('button').length).toEqual(3);
+  //       expect(container.find(dropdownContainer).find('button').length).toEqual(3);
 
-//       container.find('button.pgn__form-autosuggest__icon-button').simulate('click');
-//       expect(container.find(dropdownContainer).find('button').length).toEqual(0);
+  //       container.find('button.pgn__form-autosuggest__icon-button').simulate('click');
+  //       expect(container.find(dropdownContainer).find('button').length).toEqual(0);
 
-//       container.find('button.pgn__form-autosuggest__icon-button').simulate('click');
-//       expect(container.find(dropdownContainer).find('button').length).toEqual(3);
-//     });
+  //       container.find('button.pgn__form-autosuggest__icon-button').simulate('click');
+  //       expect(container.find(dropdownContainer).find('button').length).toEqual(3);
+  //     });
 
-//     it('filters options list based on field value', () => {
-//       container.find('input').simulate('change', { target: { value: '1' } });
+  it('filters dropdown based on typed field value with multiple matches', () => {
+    const { getByTestId, container } = render(<FormAutosuggestTestComponent />);
+    const input = getByTestId('autosuggest_textbox_input');
+    
+    fireEvent.click(input);
+    fireEvent.change(input, { target: { value: '1' } });
+    
+    const list = container.querySelectorAll('li');
+    expect(list.length).toBe(2);
+  });
 
-//       expect(container.find('.pgn__form-autosuggest__dropdown').find('button').length).toEqual(2);
-//     });
+  //     it('closes options list on click outside', () => {
+  //       const fireEvent = createDocumentListenersMock();
+  //       const dropdownContainer = '.pgn__form-autosuggest__dropdown';
 
-//     it('closes options list on click outside', () => {
-//       const fireEvent = createDocumentListenersMock();
-//       const dropdownContainer = '.pgn__form-autosuggest__dropdown';
+  //       container.find('input').simulate('click');
+  //       expect(container.find(dropdownContainer).find('button').length).toEqual(2);
 
-//       container.find('input').simulate('click');
-//       expect(container.find(dropdownContainer).find('button').length).toEqual(2);
+  //       act(() => { fireEvent.click(document.body); });
+  //       container.update();
 
-//       act(() => { fireEvent.click(document.body); });
-//       container.update();
+  //       expect(container.find(dropdownContainer).find('button').length).toEqual(0);
+  //     });
+  //   });
 
-//       expect(container.find(dropdownContainer).find('button').length).toEqual(0);
-//     });
-//   });
+  it('check focus on input after esc', () => {
+    const { getByTestId } = render(<FormAutosuggestTestComponent />);
+    const input = getByTestId('autosuggest_textbox_input');
+    fireEvent.click(input);
+    expect(input.toHaveFocus()).toBe(true);
+    // const menuItem = getByText('Option 1');
+    // fireEvent.click(menuItem);
+  });
 });
 
 //
