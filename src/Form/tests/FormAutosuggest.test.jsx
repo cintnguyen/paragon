@@ -199,18 +199,18 @@ describe('controlled behavior', () => {
     expect(list.length).toBe(2);
   });
 
-  //     it('closes options list on click outside', () => {
-  //       const fireEvent = createDocumentListenersMock();
-  //       const dropdownContainer = '.pgn__form-autosuggest__dropdown';
+  it('closes options list on click outside', () => {
+    const { getByTestId, container } = render(<FormAutosuggestTestComponent />);
+    const input = getByTestId('autosuggest_textbox_input');
 
-  //       container.find('input').simulate('click');
-  //       expect(container.find(dropdownContainer).find('button').length).toEqual(2);
+    fireEvent.click(input);
+    const list = container.querySelectorAll('li');
+    expect(list.length).toBe(3);
 
-  //       act(() => { fireEvent.click(document.body); });
-  //       container.update();
-
-  //       expect(container.find(dropdownContainer).find('button').length).toEqual(0);
-  //     });
+    fireEvent.click(document.body);
+    const updatedList = container.querySelectorAll('li');
+    expect(updatedList.length).toBe(0);
+  });
   //   });
 
   // it('check focus on input after esc', () => {
