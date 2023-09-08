@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { IntlProvider } from 'react-intl';
@@ -14,22 +15,32 @@ function FormAutosuggestWrapper(props) {
 }
 
 function FormAutosuggestTestComponent(props) {
-  const onSelected = props.onSelected ?? jest.fn();
-  const onClick = props.onClick ?? jest.fn();
   return (
     <FormAutosuggestWrapper
       name="FormAutosuggest"
       floatingLabel="floatingLabel text"
       helpMessage="Example help message"
       errorMessageText="Example error message"
-      onSelected={onSelected}
+      onSelected={props.onSelected}
     >
       <FormAutosuggestOption>Option 1</FormAutosuggestOption>
-      <FormAutosuggestOption onClick={onClick}>Option 2</FormAutosuggestOption>
+      <FormAutosuggestOption onClick={props.onClick}>Option 2</FormAutosuggestOption>
       <FormAutosuggestOption>Learn from more than 160 member universities</FormAutosuggestOption>
     </FormAutosuggestWrapper>
   );
 }
+
+FormAutosuggestTestComponent.defaultProps = {
+  onSelected: jest.fn(),
+  onClick: jest.fn(),
+};
+
+FormAutosuggestTestComponent.propTypes = {
+  /** Specifies onSelected event handler. */
+  onSelected: PropTypes.func,
+  /** Specifies onClick event handler. */
+  onClick: PropTypes.func,
+};
 
 describe('render behavior', () => {
   it('renders component without error', () => {
