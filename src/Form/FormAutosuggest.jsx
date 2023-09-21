@@ -21,6 +21,7 @@ function FormAutosuggest({
   ignoredArrowKeysNames,
   screenReaderText,
   value,
+  freeformValue,
   isLoading,
   errorMessageText, //create more, more specific error no selected value
   errorNoMatchingText, // error no matching value
@@ -38,7 +39,7 @@ function FormAutosuggest({
   const [isMenuClosed, setIsMenuClosed] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [state, setState] = useState({
-    displayValue: value || '',
+    displayValue: freeformValue || '',
     errorMessage: '',
     dropDownItems: [],
   });
@@ -197,7 +198,7 @@ function FormAutosuggest({
     if (value || value === '') {
       setState(prevState => ({
         ...prevState,
-        displayValue: value,
+        displayValue: freeformValue,
       }));
     }
   }, [value]);
