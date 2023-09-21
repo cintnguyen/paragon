@@ -25,6 +25,10 @@ Form auto-suggest enables users to manually select or type to find matching opti
         setSelectedDisplay(selectedObject.displayValue)
         setSelectedData(selectedObject.dataValue)
     }
+
+    console.log("SELECTEDDISPLAY:", selectedDisplay)
+    console.log("SELECTEDDATA:", selectedData)
+
     return (
         <Form.Autosuggest
             floatingLabel="Programming language"

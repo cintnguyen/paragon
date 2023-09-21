@@ -194,28 +194,29 @@ function FormAutosuggest({
     };
   });
 
-  useEffect(() => {
-    if (value || value === '') {
-      setState(prevState => ({
-        ...prevState,
-        displayValue: freeformValue,
-      }));
-    }
-  }, [value]);
+  // Not clear what this was used for
+  // useEffect(() => {
+  //   if (value || value === '') {
+  //     setState(prevState => ({
+  //       ...prevState,
+  //       displayValue: freeformValue,
+  //     }));
+  //   }
+  // }, [value]);
 
-  const setDisplayValue = (itemValue) => {
-    const optValue = [];
+  const setDisplayValue = (typedValue) => {
+    const optValues = [];
 
     children.forEach(opt => {
-      optValue.push(opt.props.children);
+      optValues.push({dataValue: opt.props.value, displayValue: opt.props.children, });
     });
 
-    const normalized = itemValue.toLowerCase();
-    const opt = optValue.find((o) => o.toLowerCase() === normalized);
+    const normalized = typedValue.toLowerCase();
+    const opt = optValues.find((o) => o.displayValue.toLowerCase() === normalized);
 
     setState(prevState => ({
       ...prevState,
-      displayValue: opt || itemValue,
+      displayValue: opt ? opt.displayValue : typedValue,
     }));
   };
 
