@@ -48,8 +48,8 @@ function FormAutosuggest({
     const clickedDataValue = e.currentTarget.getAttribute('data-value');
     const clickedDisplayValue = e.currentTarget.innerText
    
-    if (onSelected && clickedValue !== value) {
-      onSelected({dataValue: clickedValue, displayValue: clickedDisplayValue, });
+    if (onSelected && clickedDataValue !== value) {
+      onSelected({dataValue: clickedDataValue, displayValue: clickedDisplayValue, });
       // call on selected and passes the object as an argument
       // doc site example, selected will now be a data object
       //then passes that in and passes that in as the value of the autosuggest component
@@ -129,13 +129,13 @@ function FormAutosuggest({
       setIsActive(false);
       
       let errorMessage = ""
-
+    
       if (!state.displayValue){
         console.log("Nothing typed:", errorMessageText)
         
         // !state.displayValue errorMessage = errorMessageText ? errorMessageText : ''
       }
-      else if(!allowFreeFormInput){
+      else if(!allowFreeFormInput){ //not allowing for freeform, meaning must exactly match
         console.log("Freeform not allowed:", errorNoMatchingText)
         const dropDownItems = getItems(state.displayValue)
         let inputMatchesDropDown = false
