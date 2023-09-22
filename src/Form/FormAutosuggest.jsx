@@ -136,14 +136,13 @@ function FormAutosuggest({
         errorMessage = errorMessageText
       }else if(!allowFreeFormInput){ //not allowing for freeform, meaning must exactly match
         console.log("Freeform not allowed:", errorNoMatchingText)
-        const dropDownItems = getItems(state.displayValue)
         let inputMatchesDropDown = false
+        // could use getMatchingOptions()
         React.Children.forEach(children, (child) => {
           console.log("item", child.props.children)
           console.log(child.props)
           if (state.displayValue === child.props.children){
             onSelected({displayValue: state.displayValue, dataValue: child.props.value}) // freeform input is not allowed, HAS to match option values
-
             inputMatchesDropDown = true
           }
         })
@@ -200,6 +199,7 @@ function FormAutosuggest({
   // }, [value]);
 
   const setDisplayValue = (typedValue) => {
+    //possibly 202-209 to a getMatchingOptions(), const opt = getMatchingOptions()
     const optValues = [];
 
     children.forEach(opt => {
