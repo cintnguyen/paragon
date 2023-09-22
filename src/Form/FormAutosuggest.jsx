@@ -133,10 +133,8 @@ function FormAutosuggest({
     
       if (!state.displayValue){
         console.log("Nothing typed:", errorMessageText)
-        
-        // !state.displayValue errorMessage = errorMessageText ? errorMessageText : ''
-      }
-      else if(!allowFreeFormInput){ //not allowing for freeform, meaning must exactly match
+        errorMessage = errorMessageText
+      }else if(!allowFreeFormInput){ //not allowing for freeform, meaning must exactly match
         console.log("Freeform not allowed:", errorNoMatchingText)
         const dropDownItems = getItems(state.displayValue)
         let inputMatchesDropDown = false
@@ -144,21 +142,18 @@ function FormAutosuggest({
           console.log("item", child.props.children)
           console.log(child.props)
           if (state.displayValue === child.props.children){
-            onSelected(state.displayValue) // freeform input is not allowed, HAS to match option values
-            //when we get real option values then pass in as onSelected argument
-            //child.props gives me access to the option props, aka where we are setting the option value
-            //when we pass it into onSelected, it now becomes the display value as well
+            onSelected({displayValue: state.displayValue, dataValue: child.props.value}) // freeform input is not allowed, HAS to match option values
 
             inputMatchesDropDown = true
           }
         })
         if (!inputMatchesDropDown){
-          onSelected("") //setting components parent value back to default
+          onSelected({displayValue: "" , dataValue: ""}) //setting components parent value back to default
           errorMessage = errorNoMatchingText
           console.log("Freeform not allowed and doesn't match:", state.displayValue, dropDownItems, errorMessage)
         }
       }else{
-        onSelected(state.displayValue) // freeform IS allowed, give state.displayValue
+        onSelected({displayValue: state.displayValue, dataValue: state.displayValue}) // freeform IS allowed, therefore we are assigning the parent component value to be what the user types if there's no matching option
       }
 
       setState(prevState => ({
